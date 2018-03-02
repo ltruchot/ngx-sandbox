@@ -1,14 +1,23 @@
 {
   "name": "ngx-sandbox",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
+  "description": "",
+  "author": "Loïc TRUCHOT",
+  "engines": {
+    "node": "~8.9.0",
+    "npm": "~5.7.0"
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "npm-reset": "rm -rf node_modules && npm cache verify && npm i",
+    "git-reset": "git reset HEAD --hard && git clean -fd && git pull",
+    "git-refresh": "git fetch --all --tags --prune"
   },
   "private": true,
   "dependencies": {
