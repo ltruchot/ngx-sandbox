@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   config: {
-    mainApiUrl: 'https://jsonplaceholder.typicode.com/'
+    mainApiUrl: 'http://factory.adneomdevops.com/'
   }
 };
