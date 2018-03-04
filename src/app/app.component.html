@@ -1,1 +1,12 @@
-<pre>{{ auth$ | async | json }}</pre>
+<div *ngIf="(loading$ | async); else displayAuth">
+  loading...
+</div>
+<ng-template #displayAuth>
+  <div *ngIf="(currentUser$ | async); else displayAuthForm">
+    Bonjour {{ (currentUser$ | async).login }}
+  </div>
+  <ng-template #displayAuthForm>
+    <app-auth-form></app-auth-form>
+  </ng-template>
+</ng-template>
+<hr />

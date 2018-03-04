@@ -2,7 +2,10 @@
 
 This repo is an empty Angular 5 project, inculing all needed examples for following features:
 * core/shared/routes architecture
+* statefull containers / stateless components
 * api service + tests
+* ngrx store
+* register / login (ngForm version) + localStorage token
 
 Everything stays nearly untouched, like after an `ng new` schematics generation
 
@@ -13,8 +16,9 @@ Everything stays nearly untouched, like after an `ng new` schematics generation
 
 # Versions:
 
-* current project version 0.0.1
+* current project version 0.0.2
 * node 8.4.x
 * npm 5.7.x
 * @angular/cli 1.7.x
 * @angular/core 5.2.x
+* @ngrx/store 5.1.x

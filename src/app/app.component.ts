@@ -5,8 +5,10 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 // store
 import { IAuthState } from '@store/auth/auth.reducer';
-import { getAuthToken } from '@store/auth/auth.selectors';
-import { RegisterAction } from '@store/auth/auth.actions';
+import { getAuthCurrentUser, getAuthLoading } from '@store/auth/auth.selectors';
+import { UserAction } from '@store/auth/auth.actions';
+// models
+import { IUser } from '@models/user.model';
 
 @Component({
   selector: 'app-root',
@@ -14,16 +16,12 @@ import { RegisterAction } from '@store/auth/auth.actions';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  auth$: Observable<any>;
+  currentUser$: Observable<IUser>;
+  loading$: Observable<boolean>;
   constructor(private store: Store<IAuthState>) {}
   ngOnInit(): void {
-    this.auth$ = this.store.select(getAuthToken);
-    this.store.dispatch(
-      new RegisterAction({
-        email: 'ltruchot@adneom.comm',
-        password: '12345678',
-        login: 'ltruchergqreg'
-      })
-    );
+    this.currentUser$ = this.store.select(getAuthCurrentUser);
+    this.loading$ = this.store.select(getAuthLoading);
+    this.store.dispatch(new UserAction());
   }
 }

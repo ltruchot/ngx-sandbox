@@ -1,6 +1,6 @@
 {
   "name": "ngx-sandbox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "description": "This repo is an empty Angular 5 project, inculing all needed examples for various features, like api service, store, etc.",
   "author": "Loïc TRUCHOT",

@@ -1,18 +1,18 @@
 import * as auth from './auth.actions';
+// models
+import { IUser } from '@models/user.model';
 
 export interface IAuthState {
   loading: boolean;
-  result: string[];
-  token: string;
+  currentUser: IUser;
   error: Error;
   type: string;
 }
 
 export const initialState: IAuthState = {
   loading: false,
-  result: [],
+  currentUser: null,
   error: null,
-  token: '',
   type: ''
 };
 
@@ -21,7 +21,9 @@ export function reducer(
   action: auth.Actions
 ): IAuthState {
   switch (action.type) {
-    case auth.REGISTER: {
+    case auth.LOGIN:
+    case auth.REGISTER:
+    case auth.USER: {
       return {
         ...state,
         loading: true,
@@ -29,20 +31,32 @@ export function reducer(
         type: action.type
       };
     }
-
+    case auth.LOGIN_SUCCESS:
     case auth.REGISTER_SUCCESS: {
+      window.localStorage.setItem('token', action.payload);
       return {
         ...state,
-        token: action.payload,
         loading: false,
         error: null,
         type: action.type
       };
     }
-
-    case auth.REGISTER_FAIL: {
+    case auth.USER_SUCCESS: {
       return {
         ...state,
+        currentUser: action.payload,
+        loading: false,
+        error: null,
+        type: action.type
+      };
+    }
+    case auth.LOGIN_FAIL:
+    case auth.REGISTER_FAIL:
+    case auth.USER_FAIL: {
+      window.localStorage.removeItem('token');
+      return {
+        ...state,
+        currentUser: null,
         loading: false,
         error: action.error,
         type: action.type
@@ -54,4 +68,6 @@ export function reducer(
     }
   }
 }
-export const getAuthToken = (state: IAuthState) => state.token;
+
+export const loading = (state: IAuthState) => state.loading;
+export const currentUser = (state: IAuthState) => state.currentUser;

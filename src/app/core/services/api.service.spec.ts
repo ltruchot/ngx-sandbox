@@ -25,7 +25,7 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .getResources('posts', null, testApi)
+          .getResources('posts', false, null, testApi)
           .subscribe((data: any) => {
             expect(data.length).toBe(100);
             expect(data[0].title).toBe(
@@ -47,6 +47,7 @@ describe('ApiService', () => {
               body: 'bar',
               userId: 1
             },
+            false,
             null,
             testApi
           )
@@ -69,6 +70,7 @@ describe('ApiService', () => {
               body: 'bar',
               userId: 1
             },
+            false,
             null,
             testApi
           )
@@ -83,7 +85,7 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .deleteResources('posts/1', null, testApi)
+          .deleteResources('posts/1', false, null, testApi)
           .subscribe((data: any) => {
             expect(data).toEqual({});
           });
@@ -96,7 +98,7 @@ describe('ApiService', () => {
       inject([ApiService], (apiService: ApiService) => {
         expect(async () =>
           apiService
-            .getResources('posts/404', null, testApi)
+            .getResources('posts/404', false, null, testApi)
             .subscribe((err: any) => {
               expect(err.status).toBe(404);
             })

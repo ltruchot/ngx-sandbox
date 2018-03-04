@@ -1,6 +1,10 @@
 // ng
 import { TestBed, async } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
+// modules
+import { SharedModule } from '@shared/shared.module';
+import { CoreModule } from '@core/core.module';
+import { AppStoreModule } from '@store/app-store.module';
 // components
 import { AppComponent } from './app.component';
 // services
@@ -10,7 +14,12 @@ describe('AppComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        imports: [HttpClientModule],
+        imports: [
+          HttpClientModule,
+          AppStoreModule.forRoot(),
+          CoreModule,
+          SharedModule
+        ],
         declarations: [AppComponent],
         providers: [ApiService]
       }).compileComponents();
