@@ -1,12 +1,11 @@
-<div *ngIf="(loading$ | async); else displayAuth">
+<!-- display loader when store indicate "loading" -->
+<div *ngIf="(authLoading$ | async); else displayAuth">
   loading...
 </div>
+<!-- display auth form or welcome -->
+
+<!-- display welcome message if user is already auth -->
 <ng-template #displayAuth>
-  <div *ngIf="(currentUser$ | async); else displayAuthForm">
-    Bonjour {{ (currentUser$ | async).login }}
-  </div>
-  <ng-template #displayAuthForm>
-    <app-auth-form></app-auth-form>
-  </ng-template>
+  <app-auth-form #displayAuth></app-auth-form>
 </ng-template>
 <hr />

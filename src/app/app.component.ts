@@ -5,10 +5,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 // store
 import { IAuthState } from '@store/auth/auth.reducer';
-import { getAuthCurrentUser, getAuthLoading } from '@store/auth/auth.selectors';
-import { UserAction } from '@store/auth/auth.actions';
-// models
-import { IUser } from '@models/user.model';
+import { getAuthLoading } from '@store/auth/auth.selectors';
+import { GetCurrentUserAction } from '@store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -16,12 +14,13 @@ import { IUser } from '@models/user.model';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  currentUser$: Observable<IUser>;
-  loading$: Observable<boolean>;
+  authLoading$: Observable<boolean>;
   constructor(private store: Store<IAuthState>) {}
+
   ngOnInit(): void {
-    this.currentUser$ = this.store.select(getAuthCurrentUser);
-    this.loading$ = this.store.select(getAuthLoading);
-    this.store.dispatch(new UserAction());
+    // watch auth loading
+    this.authLoading$ = this.store.select(getAuthLoading);
+    // try to get current authenticate user
+    this.store.dispatch(new GetCurrentUserAction());
   }
 }

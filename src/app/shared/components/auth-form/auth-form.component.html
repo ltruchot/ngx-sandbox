@@ -1,2 +1,11 @@
-<app-login (login)="onLogin($event)"></app-login>
-<app-register (register)="onRegister($event)"></app-register>
+<div class="auth-form">
+  <!-- display welcome message if user is already auth -->
+  <app-logout *ngIf="(currentUser$ | async); else displayAuthForm" [user]="(currentUser$ | async)"
+    (logout)="onLogout()">
+  </app-logout>
+  <!-- display an auth form if user isn't auth -->
+  <ng-template #displayAuthForm>
+    <app-login (login)="onLogin($event)"></app-login>
+    <app-register (register)="onRegister($event)"></app-register>
+  </ng-template>
+</div>

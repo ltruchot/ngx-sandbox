@@ -38,19 +38,19 @@ export class LoginFailAction implements Action {
 }
 
 // user
-export const USER = '[Auth] User';
-export const USER_SUCCESS = '[Auth] User Success';
-export const USER_FAIL = '[Auth] User Fail';
-export class UserAction implements Action {
-  readonly type = USER;
+export const GET_CURRENT_USER = '[Auth] Get Current User';
+export const GET_CURRENT_USER_SUCCESS = '[Auth] Get Current User Success';
+export const GET_CURRENT_USER_FAIL = '[Auth] Get Current User Fail';
+export class GetCurrentUserAction implements Action {
+  readonly type = GET_CURRENT_USER;
   constructor() {}
 }
-export class UserSuccessAction implements Action {
-  readonly type = USER_SUCCESS;
+export class GetCurrentUserSuccessAction implements Action {
+  readonly type = GET_CURRENT_USER_SUCCESS;
   constructor(public payload: IUser) {}
 }
-export class UserFailAction implements Action {
-  readonly type = USER_FAIL;
+export class GetCurrentUserFailAction implements Action {
+  readonly type = GET_CURRENT_USER_FAIL;
   constructor(public error: Error) {}
 }
 
@@ -61,6 +61,6 @@ export type Actions =
   | LoginAction
   | LoginSuccessAction
   | LoginFailAction
-  | UserAction
-  | UserSuccessAction
-  | UserFailAction;
+  | GetCurrentUserAction
+  | GetCurrentUserSuccessAction
+  | GetCurrentUserFailAction;

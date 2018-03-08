@@ -23,7 +23,7 @@ export function reducer(
   switch (action.type) {
     case auth.LOGIN:
     case auth.REGISTER:
-    case auth.USER: {
+    case auth.GET_CURRENT_USER: {
       return {
         ...state,
         loading: true,
@@ -41,7 +41,7 @@ export function reducer(
         type: action.type
       };
     }
-    case auth.USER_SUCCESS: {
+    case auth.GET_CURRENT_USER_SUCCESS: {
       return {
         ...state,
         currentUser: action.payload,
@@ -52,7 +52,7 @@ export function reducer(
     }
     case auth.LOGIN_FAIL:
     case auth.REGISTER_FAIL:
-    case auth.USER_FAIL: {
+    case auth.GET_CURRENT_USER_FAIL: {
       window.localStorage.removeItem('token');
       return {
         ...state,

@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { LoginComponent } from './auth-form/login/login.component';
 import { RegisterComponent } from './auth-form/register/register.component';
+import { LogoutComponent } from './auth-form/logout/logout.component';
 
 @NgModule({
   imports: [CommonModule, FormsModule],
   exports: [AuthFormComponent],
-  declarations: [AuthFormComponent, LoginComponent, RegisterComponent],
+  declarations: [AuthFormComponent, LoginComponent, RegisterComponent, LogoutComponent],
   providers: []
 })
 export class ComponentsModule {}

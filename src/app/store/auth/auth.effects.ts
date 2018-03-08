@@ -22,7 +22,7 @@ export class AuthEffects {
         // If successful, dispatch success action with result
         switchMap((res: string) => [
           new authActions.RegisterSuccessAction(res),
-          new authActions.UserAction()
+          new authActions.GetCurrentUserAction()
         ]),
         // If request fails, dispatch failed action
         catchError((err: Error) =>
@@ -40,7 +40,7 @@ export class AuthEffects {
         // If successful, dispatch success action with result
         switchMap((res: string) => [
           new authActions.LoginSuccessAction(res),
-          new authActions.UserAction()
+          new authActions.GetCurrentUserAction()
         ]),
         // If request fails, dispatch failed action
         catchError((err: Error) =>
@@ -51,16 +51,16 @@ export class AuthEffects {
   );
 
   @Effect()
-  user$ = this.actions$.ofType(authActions.USER).pipe(
+  user$ = this.actions$.ofType(authActions.GET_CURRENT_USER).pipe(
     switchMap(() =>
       this.authStoreService.user().pipe(
         // If successful, dispatch success action with result
         map((res: IUser) => {
-          return new authActions.UserSuccessAction(res);
+          return new authActions.GetCurrentUserSuccessAction(res);
         }),
         // If request fails, dispatch failed action
         catchError((err: Error) =>
-          observableOf(new authActions.UserFailAction(err))
+          observableOf(new authActions.GetCurrentUserFailAction(err))
         )
       )
     )

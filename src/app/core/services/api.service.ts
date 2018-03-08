@@ -9,89 +9,50 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '@env/environment';
 // models
 import { IFlatObject } from '@models/common.model';
-import { IRequestOptions } from '@models/http.model';
+import { IReqOptions, IReqParams, IReqParamsData } from '@models/http.model';
 
 @Injectable()
 export class ApiService {
-  private apiUrls: { [s: string]: string } = {
-    main: environment.config.mainApiUrl
-  };
-
+  private _defaultContentType = 'application/json';
   constructor(private http: HttpClient) {}
 
-  getResources<T>(
-    url: string,
-    auth?: boolean,
-    search?: IFlatObject,
-    apiUrl?: string
-  ): Observable<T> {
-    return this.doRequest<T>('get', url, auth, null, search, apiUrl);
-  }
-
-  putResources<T>(
-    url: string,
-    data: T,
-    auth?: boolean,
-    search?: IFlatObject,
-    apiUrl?: string
-  ): Observable<T> {
-    return this.doRequest<T>('put', url, auth, data, search, apiUrl);
-  }
-
-  postResources<T>(
-    url: string,
-    data: T,
-    auth?: boolean,
-    search?: IFlatObject,
-    apiUrl?: string
-  ): Observable<T> {
-    return this.doRequest<T>('post', url, auth, data, search, apiUrl);
-  }
-
-  deleteResources<T>(
-    url: string,
-    auth?: boolean,
-    search?: IFlatObject,
-    apiUrl?: string
-  ): Observable<T> {
-    return this.doRequest<T>('delete', url, auth, null, search, apiUrl);
-  }
-
-  doRequest<T>(
-    type: 'get' | 'post' | 'put' | 'delete',
-    url: string,
-    auth?: boolean,
-    data?: T,
-    search?: IFlatObject,
-    apiUrl?: string
-  ): Observable<T> {
-    url = (apiUrl || this.apiUrls.main) + url;
-    const params: any[] = [url];
+  request<T>({
+    method,
+    url,
+    auth,
+    urlParams,
+    apiEnv,
+    ...options
+  }: IReqParams | IReqParamsData<T>): Observable<T> {
+    const data = (options as { data }).data || null;
+    const reqUrl = (apiEnv || environment.config.mainApiUrl) + url;
+    const reqArguments: any[] = [reqUrl];
     if (data) {
-      params.push(data);
+      reqArguments.push(data);
     }
-    params.push(this.createOptions(search, auth));
-    return this.http[type]
-      .apply(this.http, params)
-      .pipe(catchError(this.throwReactiveError));
+    reqArguments.push(this._createOptions(urlParams, auth));
+    console.log(reqArguments);
+    return this.http[method]
+      .apply(this.http, reqArguments)
+      .pipe(catchError(this._throwReactiveError));
   }
 
-  createOptions(search?: IFlatObject, auth?: boolean): IRequestOptions {
-    const headers: any = { 'Content-Type': 'application/json' };
+  private _createOptions(urlParams?: IFlatObject, auth?: boolean): IReqOptions {
+    const headers: any = { 'Content-Type': this._defaultContentType };
     if (auth) {
       const token = window.localStorage.getItem('token');
       headers['Authorization'] = 'Bearer ' + token;
     }
-    const options: IRequestOptions = {
+    const options: IReqOptions = {
       headers: new HttpHeaders(headers)
     };
-    if (search) {
-      options.params = new HttpParams({ fromObject: search });
+    if (urlParams) {
+      options.params = new HttpParams({ fromObject: urlParams });
     }
     return options;
   }
 
-  throwReactiveError(error: any): ErrorObservable {
+  private _throwReactiveError(error: any): ErrorObservable {
     console.error('api.service::throwReactiveError', error);
     return Observable.throw(error);
   }
