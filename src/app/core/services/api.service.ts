@@ -20,37 +20,45 @@ export class ApiService {
     method,
     url,
     auth,
-    urlParams,
+    queryParams,
     apiEnv,
     ...options
   }: IReqParams | IReqParamsData<T>): Observable<T> {
-    const data = (options as { data }).data || null;
+    const data = (options as any).data || null;
     const reqUrl = (apiEnv || environment.config.mainApiUrl) + url;
     const reqArguments: any[] = [reqUrl];
     if (data) {
       reqArguments.push(data);
     }
-    reqArguments.push(this._createOptions(urlParams, auth));
-    console.log(reqArguments);
+    reqArguments.push(this._createOptions(queryParams, auth));
     return this.http[method]
       .apply(this.http, reqArguments)
       .pipe(catchError(this._throwReactiveError));
   }
 
-  private _createOptions(urlParams?: IFlatObject, auth?: boolean): IReqOptions {
+  private _createOptions(
+    queryParams?: IFlatObject,
+    auth?: boolean
+  ): IReqOptions {
     const headers: any = { 'Content-Type': this._defaultContentType };
     if (auth) {
       const token = window.localStorage.getItem('token');
-      headers['Authorization'] = 'Bearer ' + token;
+      if (token) {
+        headers['Authorization'] = 'Bearer ' + token;
+      }
     }
     const options: IReqOptions = {
       headers: new HttpHeaders(headers)
     };
-    if (urlParams) {
-      options.params = new HttpParams({ fromObject: urlParams });
+    if (queryParams) {
+      options.params = new HttpParams({ fromObject: queryParams });
     }
     return options;
   }
+
+  // private _setAuth(headers) {
+
+  // }
 
   private _throwReactiveError(error: any): ErrorObservable {
     console.error('api.service::throwReactiveError', error);

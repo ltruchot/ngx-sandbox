@@ -5,15 +5,15 @@ import { Observable } from 'rxjs/Observable';
 // services
 import { ApiService } from '@core/services/api.service';
 // models
-import { IUser } from '@models/user.model';
+import { IUser, IUserAuth } from '@models/user.model';
 
 @Injectable()
 export class AuthStoreService {
   constructor(private apiService: ApiService) {}
-  register(user: IUser): Observable<any> {
+  register(user: IUserAuth): Observable<any> {
     return this.apiService.request({ method: 'post', url: 'user', data: user });
   }
-  login(user: IUser): Observable<any> {
+  login(user: IUserAuth): Observable<any> {
     return this.apiService.request({
       method: 'post',
       url: 'login',

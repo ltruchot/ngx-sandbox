@@ -10,18 +10,18 @@ import { catchError } from 'rxjs/operators/catchError';
 import { AuthStoreService } from './auth-store.service';
 import * as authActions from './auth.actions';
 // models
-import { IUser } from '@models/user.model';
+import { IUser, IUserAuth } from '@models/user.model';
 
 @Injectable()
 export class AuthEffects {
   @Effect()
   register$ = this.actions$.ofType(authActions.REGISTER).pipe(
     map((action: authActions.RegisterAction) => action.payload),
-    switchMap((user: IUser) =>
+    switchMap((user: IUserAuth) =>
       this.authStoreService.register(user).pipe(
         // If successful, dispatch success action with result
-        switchMap((res: string) => [
-          new authActions.RegisterSuccessAction(res),
+        switchMap((token: string) => [
+          new authActions.RegisterSuccessAction(token),
           new authActions.GetCurrentUserAction()
         ]),
         // If request fails, dispatch failed action
@@ -35,7 +35,7 @@ export class AuthEffects {
   @Effect()
   login$ = this.actions$.ofType(authActions.LOGIN).pipe(
     map((action: authActions.LoginAction) => action.payload),
-    switchMap((user: IUser) =>
+    switchMap((user: IUserAuth) =>
       this.authStoreService.login(user).pipe(
         // If successful, dispatch success action with result
         switchMap((res: string) => [

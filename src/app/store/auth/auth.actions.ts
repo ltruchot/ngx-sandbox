@@ -1,7 +1,7 @@
 // npm
 import { Action } from '@ngrx/store';
 // models
-import { IUser } from '@models/user.model';
+import { IUser, IUserAuth } from '@models/user.model';
 
 // register
 export const REGISTER = '[Auth] Register';
@@ -9,7 +9,7 @@ export const REGISTER_SUCCESS = '[Auth] Register Success';
 export const REGISTER_FAIL = '[Auth] Register Fail';
 export class RegisterAction implements Action {
   readonly type = REGISTER;
-  constructor(public payload: IUser) {}
+  constructor(public payload: IUserAuth) {}
 }
 export class RegisterSuccessAction implements Action {
   readonly type = REGISTER_SUCCESS;
@@ -26,7 +26,7 @@ export const LOGIN_SUCCESS = '[Auth] Login Success';
 export const LOGIN_FAIL = '[Auth] Login Fail';
 export class LoginAction implements Action {
   readonly type = LOGIN;
-  constructor(public payload: IUser) {}
+  constructor(public payload: IUserAuth) {}
 }
 export class LoginSuccessAction implements Action {
   readonly type = LOGIN_SUCCESS;

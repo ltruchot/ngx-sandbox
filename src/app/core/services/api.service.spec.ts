@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 // services
 import { ApiService } from './api.service';
 
-const testApi = 'https://jsonplaceholder.typicode.com/';
+const apiEnv = 'https://jsonplaceholder.typicode.com/';
 
 describe('ApiService', () => {
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .getResources('posts', false, null, testApi)
+          .request({ method: 'get', url: 'posts', apiEnv })
           .subscribe((data: any) => {
             expect(data.length).toBe(100);
             expect(data[0].title).toBe(
@@ -40,17 +40,16 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .postResources(
-            'posts',
-            {
+          .request({
+            method: 'post',
+            url: 'posts',
+            data: {
               title: 'foo',
               body: 'bar',
               userId: 1
             },
-            false,
-            null,
-            testApi
-          )
+            apiEnv
+          })
           .subscribe((data: any) => {
             expect(data.title).toBe('foo');
           });
@@ -62,18 +61,36 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .putResources(
-            'posts/1',
-            {
+          .request({
+            method: 'put',
+            url: 'posts/1',
+            data: {
               id: 1,
               title: 'foo',
               body: 'bar',
               userId: 1
             },
-            false,
-            null,
-            testApi
-          )
+            apiEnv
+          })
+          .subscribe((data: any) => {
+            expect(data.body).toBe('bar');
+          });
+      })
+    )
+  );
+  it(
+    'it should perform a PATCH request',
+    async(
+      inject([ApiService], (apiService: ApiService) => {
+        apiService
+          .request({
+            method: 'patch',
+            url: 'posts/1',
+            data: {
+              title: 'foo'
+            },
+            apiEnv
+          })
           .subscribe((data: any) => {
             expect(data.body).toBe('bar');
           });
@@ -85,7 +102,7 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .deleteResources('posts/1', false, null, testApi)
+          .request({ method: 'delete', url: 'posts/1', apiEnv })
           .subscribe((data: any) => {
             expect(data).toEqual({});
           });
@@ -98,7 +115,7 @@ describe('ApiService', () => {
       inject([ApiService], (apiService: ApiService) => {
         expect(async () =>
           apiService
-            .getResources('posts/404', false, null, testApi)
+            .request({ method: 'get', url: 'posts/404', apiEnv })
             .subscribe((err: any) => {
               expect(err.status).toBe(404);
             })

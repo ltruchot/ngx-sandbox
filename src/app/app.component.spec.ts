@@ -9,6 +9,7 @@ import { AppStoreModule } from '@store/app-store.module';
 import { AppComponent } from './app.component';
 // services
 import { ApiService } from '@core/services/api.service';
+import { AppRoutingModule } from '@app/app-routing.module';
 
 describe('AppComponent', () => {
   beforeEach(
@@ -17,6 +18,7 @@ describe('AppComponent', () => {
         imports: [
           HttpClientModule,
           AppStoreModule.forRoot(),
+          AppRoutingModule,
           CoreModule,
           SharedModule
         ],

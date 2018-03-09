@@ -1,21 +1,21 @@
 // ng
 import { Component, EventEmitter, Output } from '@angular/core';
 // models
-import { IUser } from '@models/user.model';
+import { IUserAuth } from '@models/user.model';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html'
 })
 export class RegisterComponent {
-  @Output() register = new EventEmitter<IUser>();
-  user: IUser = {
+  @Output() register = new EventEmitter<IUserAuth>();
+  user: IUserAuth = {
     login: '',
     email: '',
     password: ''
   };
   constructor() {}
-  onSubmit(formValue: IUser, formValid: boolean): void {
+  onSubmit(formValue: IUserAuth, formValid: boolean): void {
     if (formValid) {
       this.register.emit(formValue);
     }

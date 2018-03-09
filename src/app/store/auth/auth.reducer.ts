@@ -1,6 +1,7 @@
-import * as auth from './auth.actions';
 // models
 import { IUser } from '@models/user.model';
+// store
+import * as auth from './auth.actions';
 
 export interface IAuthState {
   loading: boolean;

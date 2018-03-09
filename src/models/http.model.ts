@@ -24,7 +24,7 @@ export interface IReqParams {
   url: string;
   method: 'get' | 'delete';
   auth?: boolean;
-  urlParams?: IFlatObject;
+  queryParams?: IFlatObject;
   apiEnv?: string;
 }
 
@@ -32,7 +32,7 @@ export interface IReqParamsData<T> {
   url: string;
   method: 'post' | 'put' | 'patch';
   auth?: boolean;
-  urlParams?: IFlatObject;
+  queryParams?: IFlatObject;
   apiEnv?: string;
   data: T;
 }

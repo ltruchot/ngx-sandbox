@@ -19,7 +19,9 @@
     "noUnusedParameters": true,
     "baseUrl": "./src/",
     "paths": {
+      "@app/*": ["app/*"],
       "@core/*": ["app/core/*"],
+      "@routes/*": ["app/routes/*"],
       "@shared/*": ["app/shared/*"],
       "@store/*": ["app/store/*"],
       "@models/*": ["models/*","models/index"],

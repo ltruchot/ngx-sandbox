@@ -12,7 +12,7 @@ import {
   RegisterAction
 } from '@store/auth/auth.actions';
 // models
-import { IUser } from '@models/user.model';
+import { IUser, IUserAuth } from '@models/user.model';
 import { getAuthCurrentUser } from '@store/auth/auth.selectors';
 
 @Component({
@@ -25,14 +25,15 @@ export class AuthFormComponent implements OnInit {
   constructor(private store: Store<IAuthState>) {}
 
   ngOnInit(): void {
+    // watch current user
     this.currentUser$ = this.store.select(getAuthCurrentUser);
   }
 
-  onLogin(user: IUser): void {
+  onLogin(user: IUserAuth): void {
     this.store.dispatch(new LoginAction(user));
   }
 
-  onRegister(user: IUser): void {
+  onRegister(user: IUserAuth): void {
     this.store.dispatch(new RegisterAction(user));
   }
 

@@ -9,6 +9,7 @@ import { CoreModule } from '@core/core.module';
 import { AuthFormComponent } from './auth-form.component';
 import { LoginComponent } from '@shared/components/auth-form/login/login.component';
 import { RegisterComponent } from '@shared/components/auth-form/register/register.component';
+import { LogoutComponent } from '@shared/components/auth-form/logout/logout.component';
 
 describe('AuthFormComponent', () => {
   let component: AuthFormComponent;
@@ -23,7 +24,12 @@ describe('AuthFormComponent', () => {
           AppStoreModule.forRoot(),
           CoreModule
         ],
-        declarations: [AuthFormComponent, LoginComponent, RegisterComponent]
+        declarations: [
+          AuthFormComponent,
+          LoginComponent,
+          RegisterComponent,
+          LogoutComponent
+        ]
       }).compileComponents();
     })
   );
