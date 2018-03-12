@@ -4,25 +4,21 @@ import { RouterModule } from '@angular/router';
 // modules
 import { SharedModule } from '@shared/shared.module';
 // component
-import { AuthenticationComponent } from './authentication.component';
+import { AuthComponent } from './auth.component';
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { LoginComponent } from './auth-form/login/login.component';
 import { RegisterComponent } from './auth-form/register/register.component';
-import { LogoutComponent } from './auth-form/logout/logout.component';
 
-const routes = [
-  { path: '', component: AuthenticationComponent, pathMatch: 'full' }
-];
+const routes = [{ path: '', component: AuthComponent, pathMatch: 'full' }];
 
 @NgModule({
   imports: [RouterModule.forChild(routes), SharedModule],
   exports: [AuthFormComponent],
   declarations: [
-    AuthenticationComponent,
+    AuthComponent,
     AuthFormComponent,
     LoginComponent,
-    RegisterComponent,
-    LogoutComponent
+    RegisterComponent
   ]
 })
-export class AuthenticationModule {}
+export class AuthModule {}

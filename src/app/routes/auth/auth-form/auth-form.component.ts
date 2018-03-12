@@ -1,9 +1,10 @@
 // ng
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 // npm
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
-// import { share } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+import { takeUntil } from 'rxjs/operators';
 // store
 import { IAuthState } from '@store/auth/auth.reducer';
 import {
@@ -19,14 +20,23 @@ import { getAuthCurrentUser } from '@store/auth/auth.selectors';
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html'
 })
-export class AuthFormComponent implements OnInit {
-  currentUser$: Observable<IUser>;
-
-  constructor(private store: Store<IAuthState>) {}
+export class AuthFormComponent implements OnDestroy, OnInit {
+  currentUser: IUser;
+  displayedForm: 'login' | 'register' = 'login';
+  protected destroyed$: Subject<boolean> = new Subject();
+  constructor(private store: Store<IAuthState>, private router: Router) {}
 
   ngOnInit(): void {
     // watch current user
-    this.currentUser$ = this.store.select(getAuthCurrentUser);
+    this.store
+      .select(getAuthCurrentUser)
+      .pipe(takeUntil(this.destroyed$))
+      .subscribe((data: IUser) => {
+        this.currentUser = data;
+        if (data) {
+          this.router.navigate(['home']);
+        }
+      });
   }
 
   onLogin(user: IUserAuth): void {
@@ -40,5 +50,10 @@ export class AuthFormComponent implements OnInit {
   onLogout(): void {
     localStorage.removeItem('token');
     this.store.dispatch(new GetCurrentUserAction());
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

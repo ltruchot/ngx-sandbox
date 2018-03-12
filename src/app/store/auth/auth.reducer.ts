@@ -55,6 +55,7 @@ export function reducer(
     case auth.REGISTER_FAIL:
     case auth.GET_CURRENT_USER_FAIL: {
       window.localStorage.removeItem('token');
+      console.log('error', action);
       return {
         ...state,
         currentUser: null,
@@ -71,4 +72,5 @@ export function reducer(
 }
 
 export const loading = (state: IAuthState) => state.loading;
+export const error = (state: IAuthState) => state.error;
 export const currentUser = (state: IAuthState) => state.currentUser;

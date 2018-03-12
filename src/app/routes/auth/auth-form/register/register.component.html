@@ -1,8 +1,16 @@
-<form #auth="ngForm"
+<form #register="ngForm"
       class="register"
-      (ngSubmit)="onSubmit(auth.value, auth.valid)"
+      (submit)="onSubmit(register.value, register.valid, $event)"
       novalidate>
-  <h2>Login</h2>
+  <h2>Register</h2>
+  <div>
+    <label for="email">email:</label>
+    <input name="email"
+           type="email"
+           [ngModel]="user.email"
+           required
+           email />
+  </div>
   <div>
     <label for="login">login:</label>
     <input name="login"
@@ -18,5 +26,5 @@
            required />
   </div>
   <button type="submit"
-          [disabled]="auth.invalid">Sign in</button>
+          [disabled]="register.invalid">Sign up</button>
 </form>

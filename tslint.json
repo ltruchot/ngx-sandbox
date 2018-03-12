@@ -12,7 +12,7 @@
       true,
       {
         "import-sources-order": "any",
-        "named-imports-order": "lowercase-last"
+        "named-imports-order": "lowercase-first"
       }
     ],
     "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],

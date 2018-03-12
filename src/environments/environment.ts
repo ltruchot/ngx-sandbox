@@ -6,6 +6,6 @@
 export const environment = {
   production: false,
   config: {
-    mainApiUrl: 'http://factory.adneomdevops.com/'
+    mainApiUrl: 'https://factory.adneomdevops.com/'
   }
 };

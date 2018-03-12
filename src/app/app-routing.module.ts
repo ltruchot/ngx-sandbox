@@ -15,10 +15,9 @@ const appRoutes: Routes = [
     loadChildren: '@routes/not-found/not-found.module#NotFoundModule'
   },
   {
-    path: 'authentication',
+    path: 'auth',
     pathMatch: 'full',
-    loadChildren:
-      '@routes/authentication/authentication.module#AuthenticationModule'
+    loadChildren: '@routes/auth/auth.module#AuthModule'
   },
   {
     path: '**',

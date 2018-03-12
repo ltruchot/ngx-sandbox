@@ -1,0 +1,13 @@
+<header>
+  @core/components/header.component works!
+  <br />
+  <a routerLink="/auth">auth</a> |
+  <a routerLink="/home">home</a> |
+  <a routerLink="/not-found">404</a>
+  <!-- display welcome message if user is already auth -->
+  <app-logout [style.float]="'right'"
+              *ngIf="(currentUser$ | async); else displayAuthForm"
+              [user]="(currentUser$ | async)"
+              (logout)="onLogout()">
+  </app-logout>
+</header>

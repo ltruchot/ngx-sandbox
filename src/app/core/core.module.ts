@@ -2,12 +2,14 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 // services
-import { ServicesModule } from './services/services.module';
+import { CoreServicesModule } from './services/core-services.module';
+import { CoreComponentsModule } from './components/core-components.module';
 
 @NgModule({
-  imports: [CommonModule, ServicesModule],
+  imports: [CommonModule, CoreServicesModule, CoreComponentsModule],
   declarations: [],
-  providers: []
+  providers: [],
+  exports: [CoreComponentsModule]
 })
 export class CoreModule {
   constructor(

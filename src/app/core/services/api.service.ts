@@ -8,60 +8,103 @@ import { catchError } from 'rxjs/operators';
 //  env
 import { environment } from '@env/environment';
 // models
-import { IFlatObject } from '@models/common.model';
-import { IReqOptions, IReqParams, IReqParamsData } from '@models/http.model';
+import { IObject } from '@models/common.model';
+import {
+  EMethods,
+  EMethodsWithBody,
+  IReqOptions,
+  IReqParams,
+  IReqParamsWithBody,
+  TAuthorizedMethods
+} from '@models/http.model';
 
 @Injectable()
 export class ApiService {
   private _defaultContentType = 'application/json';
   constructor(private http: HttpClient) {}
 
-  request<T>({
-    method,
-    url,
-    auth,
-    queryParams,
-    apiEnv,
-    ...options
-  }: IReqParams | IReqParamsData<T>): Observable<T> {
-    const data = (options as any).data || null;
-    const reqUrl = (apiEnv || environment.config.mainApiUrl) + url;
-    const reqArguments: any[] = [reqUrl];
-    if (data) {
-      reqArguments.push(data);
+  // requests with body
+  post<T>(options: IReqParamsWithBody<T>): Observable<T> {
+    return this.request<T>('post', options);
+  }
+  put<T>(options: IReqParamsWithBody<T>): Observable<T> {
+    return this.request<T>('put', options);
+  }
+  patch<T>(options: IReqParamsWithBody<T>): Observable<T> {
+    return this.request<T>('patch', options);
+  }
+
+  // request without body
+  get<T>(options: IReqParams): Observable<T> {
+    return this.request<T>('get', options);
+  }
+  delete<T>(options: IReqParams): Observable<T> {
+    return this.request<T>('delete', options);
+  }
+  head<T>(options: IReqParams): Observable<T> {
+    return this.request<T>('head', options);
+  }
+
+  request<T>(
+    method: TAuthorizedMethods,
+    {
+      url,
+      auth,
+      queryParams,
+      apiEnv,
+      headers,
+      ...options
+    }: IReqParams | IReqParamsWithBody<T>
+  ): Observable<T> {
+    // prepare url
+    url = (apiEnv || environment.config.mainApiUrl) + url;
+
+    // check method
+    const reqMethod = EMethods[method] || EMethodsWithBody[method];
+    if (!reqMethod) {
+      return this._throwReactiveError(
+        new Error(`${method} is not a valid HTTP method`)
+      ) as Observable<any>;
     }
-    reqArguments.push(this._createOptions(queryParams, auth));
-    return this.http[method]
-      .apply(this.http, reqArguments)
+
+    // prepare options
+    const httpRequestOptions: IReqOptions = {
+      headers: this._createHeaders(headers, auth)
+    };
+    if (queryParams) {
+      httpRequestOptions.params = this._createQueryParams(queryParams);
+    }
+    if (EMethodsWithBody[method]) {
+      httpRequestOptions.body = (options as IReqParamsWithBody<T>).body;
+    }
+
+    // do request, and catch any error as observable
+    return this.http
+      .request(reqMethod, url, httpRequestOptions)
       .pipe(catchError(this._throwReactiveError));
   }
 
-  private _createOptions(
-    queryParams?: IFlatObject,
-    auth?: boolean
-  ): IReqOptions {
-    const headers: any = { 'Content-Type': this._defaultContentType };
-    if (auth) {
-      const token = window.localStorage.getItem('token');
-      if (token) {
-        headers['Authorization'] = 'Bearer ' + token;
-      }
-    }
-    const options: IReqOptions = {
-      headers: new HttpHeaders(headers)
-    };
-    if (queryParams) {
-      options.params = new HttpParams({ fromObject: queryParams });
-    }
-    return options;
+  private _createQueryParams(queryParams: IObject): HttpParams {
+    return queryParams ? new HttpParams({ fromObject: queryParams }) : null;
   }
 
-  // private _setAuth(headers) {
+  private _createHeaders(headers: IObject = {}, auth?: boolean): HttpHeaders {
+    // basic header + custom
+    const httpHeaders: IObject = {
+      'Content-Type': this._defaultContentType,
+      ...headers
+    };
 
-  // }
+    // add auth
+    const token: string = window.localStorage.getItem('token');
+    if (auth && token) {
+      httpHeaders['Authorization'] = 'Bearer ' + token;
+    }
+    return new HttpHeaders(httpHeaders);
+  }
 
   private _throwReactiveError(error: any): ErrorObservable {
     console.error('api.service::throwReactiveError', error);
-    return Observable.throw(error);
+    return ErrorObservable.create(error);
   }
 }

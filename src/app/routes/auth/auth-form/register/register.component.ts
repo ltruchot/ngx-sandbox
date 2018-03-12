@@ -15,9 +15,11 @@ export class RegisterComponent {
     password: ''
   };
   constructor() {}
-  onSubmit(formValue: IUserAuth, formValid: boolean): void {
+  onSubmit(formValue: IUserAuth, formValid: boolean, event: Event): boolean {
     if (formValid) {
       this.register.emit(formValue);
     }
+    event.preventDefault();
+    return false;
   }
 }

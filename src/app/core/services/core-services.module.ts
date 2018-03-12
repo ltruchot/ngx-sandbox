@@ -9,4 +9,4 @@ import { ApiService } from './api.service';
   declarations: [],
   providers: [ApiService]
 })
-export class ServicesModule {}
+export class CoreServicesModule {}

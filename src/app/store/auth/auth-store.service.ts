@@ -11,16 +11,15 @@ import { IUser, IUserAuth } from '@models/user.model';
 export class AuthStoreService {
   constructor(private apiService: ApiService) {}
   register(user: IUserAuth): Observable<any> {
-    return this.apiService.request({ method: 'post', url: 'user', data: user });
+    return this.apiService.post({ url: 'user', body: user });
   }
   login(user: IUserAuth): Observable<any> {
-    return this.apiService.request({
-      method: 'post',
+    return this.apiService.post({
       url: 'login',
-      data: user
+      body: user
     });
   }
   user(): Observable<IUser> {
-    return this.apiService.request({ method: 'get', url: 'user', auth: true });
+    return this.apiService.get({ url: 'user', auth: true });
   }
 }

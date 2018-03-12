@@ -1,3 +1,3 @@
-export interface IFlatObject {
+export interface IObject {
   [s: string]: any;
 }
