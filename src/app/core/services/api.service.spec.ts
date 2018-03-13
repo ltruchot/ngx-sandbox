@@ -24,14 +24,12 @@ describe('ApiService', () => {
     'it should perform a GET request',
     async(
       inject([ApiService], (apiService: ApiService) => {
-        apiService
-          .request({ method: 'get', url: 'posts', apiEnv })
-          .subscribe((data: any) => {
-            expect(data.length).toBe(100);
-            expect(data[0].title).toBe(
-              'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'
-            );
-          });
+        apiService.get({ url: 'posts', apiEnv }).subscribe((data: any) => {
+          expect(data.length).toBe(100);
+          expect(data[0].title).toBe(
+            'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'
+          );
+        });
       })
     )
   );
@@ -40,10 +38,9 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .request({
-            method: 'post',
+          .post({
             url: 'posts',
-            data: {
+            body: {
               title: 'foo',
               body: 'bar',
               userId: 1
@@ -61,10 +58,9 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .request({
-            method: 'put',
+          .put({
             url: 'posts/1',
-            data: {
+            body: {
               id: 1,
               title: 'foo',
               body: 'bar',
@@ -83,10 +79,9 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService
-          .request({
-            method: 'patch',
+          .patch({
             url: 'posts/1',
-            data: {
+            body: {
               title: 'foo'
             },
             apiEnv
@@ -101,10 +96,26 @@ describe('ApiService', () => {
     'it should perform a DELETE request',
     async(
       inject([ApiService], (apiService: ApiService) => {
+        apiService.delete({ url: 'posts/1', apiEnv }).subscribe((data: any) => {
+          expect(data).toEqual({});
+        });
+      })
+    )
+  );
+  it(
+    'it should perform a GET request with url params encoded',
+    async(
+      inject([ApiService], (apiService: ApiService) => {
         apiService
-          .request({ method: 'delete', url: 'posts/1', apiEnv })
+          .get({
+            url: 'posts',
+            apiEnv,
+            queryParams: { userId: 1 },
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+          })
           .subscribe((data: any) => {
-            expect(data).toEqual({});
+            expect(data.length).toBe(10);
+            expect(data[1].title).toBe('qui est esse');
           });
       })
     )
@@ -114,11 +125,9 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         expect(async () =>
-          apiService
-            .request({ method: 'get', url: 'posts/404', apiEnv })
-            .subscribe((err: any) => {
-              expect(err.status).toBe(404);
-            })
+          apiService.get({ url: 'posts/404', apiEnv }).subscribe((err: any) => {
+            expect(err.status).toBe(404);
+          })
         );
       })
     )
