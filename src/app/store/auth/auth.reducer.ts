@@ -6,6 +6,7 @@ import * as auth from './auth.actions';
 export interface IAuthState {
   loading: boolean;
   currentUser: IUser;
+  isLoggedIn: boolean;
   error: Error;
   type: string;
 }
@@ -13,6 +14,7 @@ export interface IAuthState {
 export const initialState: IAuthState = {
   loading: false,
   currentUser: null,
+  isLoggedIn: false,
   error: null,
   type: ''
 };
@@ -46,6 +48,7 @@ export function reducer(
       return {
         ...state,
         currentUser: action.payload,
+        isLoggedIn: true,
         loading: false,
         error: null,
         type: action.type
@@ -59,6 +62,7 @@ export function reducer(
       return {
         ...state,
         currentUser: null,
+        isLoggedIn: false,
         loading: false,
         error: action.error,
         type: action.type
@@ -74,3 +78,4 @@ export function reducer(
 export const loading = (state: IAuthState) => state.loading;
 export const error = (state: IAuthState) => state.error;
 export const currentUser = (state: IAuthState) => state.currentUser;
+export const isLoggedIn = (state: IAuthState) => state.isLoggedIn;

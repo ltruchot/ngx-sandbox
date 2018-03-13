@@ -7,11 +7,7 @@ import { Subject } from 'rxjs/Subject';
 import { takeUntil } from 'rxjs/operators';
 // store
 import { IAuthState } from '@store/auth/auth.reducer';
-import {
-  GetCurrentUserAction,
-  LoginAction,
-  RegisterAction
-} from '@store/auth/auth.actions';
+import { LoginAction, RegisterAction } from '@store/auth/auth.actions';
 // models
 import { IUser, IUserAuth } from '@models/user.model';
 import { getAuthCurrentUser } from '@store/auth/auth.selectors';
@@ -46,12 +42,6 @@ export class AuthFormComponent implements OnDestroy, OnInit {
   onRegister(user: IUserAuth): void {
     this.store.dispatch(new RegisterAction(user));
   }
-
-  onLogout(): void {
-    localStorage.removeItem('token');
-    this.store.dispatch(new GetCurrentUserAction());
-  }
-
   ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();

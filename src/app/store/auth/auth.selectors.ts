@@ -12,3 +12,7 @@ export const getAuthCurrentUser = createSelector(
   getAuthState,
   fromAuth.currentUser
 );
+export const getAuthIsLoggedIn = createSelector(
+  getAuthState,
+  fromAuth.isLoggedIn
+);

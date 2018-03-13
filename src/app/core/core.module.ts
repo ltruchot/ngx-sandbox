@@ -1,12 +1,18 @@
 // ng
 import { CommonModule } from '@angular/common';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
-// services
+// modules
 import { CoreServicesModule } from './services/core-services.module';
 import { CoreComponentsModule } from './components/core-components.module';
+import { CoreGuardsModule } from './guards/core-guards.module';
 
 @NgModule({
-  imports: [CommonModule, CoreServicesModule, CoreComponentsModule],
+  imports: [
+    CommonModule,
+    CoreComponentsModule,
+    CoreGuardsModule,
+    CoreServicesModule
+  ],
   declarations: [],
   providers: [],
   exports: [CoreComponentsModule]

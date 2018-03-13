@@ -3,12 +3,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 // components
-import { HomeComponent } from './home.component';
-
-const routes = [{ path: '', component: HomeComponent, pathMatch: 'full' }];
-
+import { AdminComponent } from './admin.component';
+const routes = [{ path: '', component: AdminComponent, pathMatch: 'full' }];
 @NgModule({
   imports: [CommonModule, RouterModule.forChild(routes)],
-  declarations: [HomeComponent]
+  declarations: [AdminComponent]
 })
-export class HomeModule {}
+export class AdminModule {}
