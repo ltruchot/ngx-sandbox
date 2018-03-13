@@ -1,6 +1,7 @@
 // ng
-import { TestBed, async } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
+import { APP_BASE_HREF } from '@angular/common';
 // modules
 import { SharedModule } from '@shared/shared.module';
 import { CoreModule } from '@core/core.module';
@@ -23,7 +24,7 @@ describe('AppComponent', () => {
           SharedModule
         ],
         declarations: [AppComponent],
-        providers: [ApiService]
+        providers: [ApiService, { provide: APP_BASE_HREF, useValue: '/' }]
       }).compileComponents();
     })
   );

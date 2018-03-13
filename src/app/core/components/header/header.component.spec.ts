@@ -1,5 +1,11 @@
-import { ComponentFixture, TestBed, async } from '@angular/core/testing';
-
+// ng
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+// modules
+import { AppStoreModule } from '@store/app-store.module';
+// services
+import { ApiService } from '@core/services/api.service';
+// components
 import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
@@ -9,7 +15,9 @@ describe('HeaderComponent', () => {
   beforeEach(
     async(() => {
       TestBed.configureTestingModule({
-        declarations: [HeaderComponent]
+        imports: [AppStoreModule.forRoot(), HttpClientModule],
+        declarations: [HeaderComponent],
+        providers: [ApiService]
       }).compileComponents();
     })
   );
