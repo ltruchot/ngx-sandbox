@@ -4,7 +4,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 // npm
 import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
-import { catchError } from 'rxjs/operators';
+import { defer } from 'rxjs/observable/defer';
+import { catchError, retryWhen, tap } from 'rxjs/operators';
 //  env
 import { environment } from '@env/environment';
 // models
@@ -15,8 +16,10 @@ import {
   IReqOptions,
   IReqParams,
   IReqParamsWithBody,
-  TAuthorizedMethods
+  TAuthorizedMethods,
+  IRetryReqOptions
 } from '@models/http.model';
+import { retryReqStrategy } from '@app/core/values/retry-req-strategy.value';
 
 @Injectable()
 export class ApiService {
@@ -53,6 +56,7 @@ export class ApiService {
       queryParams,
       apiEnv,
       headers,
+      refreshToken,
       ...options
     }: IReqParams | IReqParamsWithBody<T>
   ): Observable<T> {
@@ -78,10 +82,43 @@ export class ApiService {
       httpRequestOptions.body = (options as IReqParamsWithBody<T>).body;
     }
 
-    // do request, and catch any error as observable
-    return this.http
-      .request(reqMethod, url, httpRequestOptions)
-      .pipe(catchError(this._throwReactiveError));
+    // auth routes could need a "refresh token" action in case of 403 / 401
+    const retryOptions: IRetryReqOptions = refreshToken
+      ? this._getAuthRetryOptions(httpRequestOptions)
+      : {};
+
+    // do request, retry if needed, and catch any error as observable
+    return defer(() =>
+      this.http.request(reqMethod, url, httpRequestOptions)
+    ).pipe(
+      retryWhen(retryReqStrategy(retryOptions)),
+      catchError(this._throwReactiveError)
+    );
+  }
+
+  refreshToken(): Observable<any> {
+    // implements here your own refresh token request if needed
+    return this.http.post('http://localhost:3000/api/token', {
+      refreshToken: 'test'
+    });
+  }
+
+  private _getAuthRetryOptions(
+    // implements here your own "retry action" when a request fail
+    httpRequestOptions: IReqOptions
+  ): IRetryReqOptions {
+    return {
+      maxRetryAttempts: 1,
+      scalingDuration: 0,
+      statusCodes: [401, 403],
+      requestToWait: this.refreshToken().pipe(
+        tap((token: number) => {
+          httpRequestOptions.headers = new HttpHeaders({
+            Authorization: 'Bearer ' + token
+          });
+        })
+      )
+    };
   }
 
   private _createQueryParams(queryParams: IObject): HttpParams {

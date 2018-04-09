@@ -1,5 +1,7 @@
 // ng
 import { HttpHeaders, HttpParams } from '@angular/common/http';
+// npm
+import { Observable } from 'rxjs/Observable';
 // models
 import { IObject } from '@models/common.model';
 
@@ -37,8 +39,16 @@ export interface IReqParams {
   auth?: boolean;
   queryParams?: IObject;
   apiEnv?: string;
+  refreshToken?: boolean;
 }
 
 export interface IReqParamsWithBody<T> extends IReqParams {
   body: T;
+}
+
+export interface IRetryReqOptions {
+  maxRetryAttempts?: number;
+  scalingDuration?: number;
+  statusCodes?: number[];
+  requestToWait?: Observable<any>;
 }
