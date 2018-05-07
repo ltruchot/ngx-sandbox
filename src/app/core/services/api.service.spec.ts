@@ -25,7 +25,7 @@ describe('ApiService', () => {
     async(
       inject([ApiService], (apiService: ApiService) => {
         apiService.get({ url: 'posts', apiEnv }).subscribe((data: any) => {
-          expect(data.length).toBe(101);
+          expect(data.length).toBe(100);
           expect(data[0].title).toBe(
             'sunt aut facere repellat provident occaecati excepturi optio reprehenderit'
           );

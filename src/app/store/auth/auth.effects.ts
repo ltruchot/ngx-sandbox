@@ -14,6 +14,7 @@ import { IUser, IUserAuth } from '@models/user.model';
 
 @Injectable()
 export class AuthEffects {
+  // register a new user
   @Effect()
   register$ = this.actions$.ofType(authActions.REGISTER).pipe(
     map((action: authActions.RegisterAction) => action.payload),
@@ -32,6 +33,7 @@ export class AuthEffects {
     )
   );
 
+  // log in an user
   @Effect()
   login$ = this.actions$.ofType(authActions.LOGIN).pipe(
     map((action: authActions.LoginAction) => action.payload),
@@ -45,6 +47,25 @@ export class AuthEffects {
         // If request fails, dispatch failed action
         catchError((err: Error) =>
           observableOf(new authActions.LoginFailAction(err))
+        )
+      )
+    )
+  );
+
+  // refresh token of an user
+  @Effect()
+  refreshToken$ = this.actions$.ofType(authActions.REFRESH_TOKEN).pipe(
+    map((action: authActions.RefreshTokenAction) => action.payload),
+    switchMap((refreshToken: string) =>
+      this.authStoreService.refreshToken(refreshToken).pipe(
+        // If successful, dispatch success action with result
+        switchMap((res: string) => [
+          new authActions.RefreshTokenSuccessAction(res),
+          new authActions.GetCurrentUserAction()
+        ]),
+        // If request fails, dispatch failed action
+        catchError((err: Error) =>
+          observableOf(new authActions.RefreshTokenFailAction(err))
         )
       )
     )

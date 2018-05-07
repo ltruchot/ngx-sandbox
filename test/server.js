@@ -7,8 +7,8 @@ server.use(middlewares)
 // server.use(router)
 // Add custom routes before JSON Server router
 server.post('/api/token', (req, res) => {
-  res.json('Testing token from server')
+  res.json('random-token-for-test')
 })
-server.listen(3000, () => {
+server.listen(3013, () => {
   console.log('JSON Server is running')
 })

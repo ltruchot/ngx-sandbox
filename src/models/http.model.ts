@@ -39,7 +39,7 @@ export interface IReqParams {
   auth?: boolean;
   queryParams?: IObject;
   apiEnv?: string;
-  refreshToken?: boolean;
+  retryOptions?: IRetryReqOptions;
 }
 
 export interface IReqParamsWithBody<T> extends IReqParams {
@@ -50,5 +50,5 @@ export interface IRetryReqOptions {
   maxRetryAttempts?: number;
   scalingDuration?: number;
   statusCodes?: number[];
-  requestToWait?: Observable<any>;
+  requestToWait?: Observable<IObject>;
 }

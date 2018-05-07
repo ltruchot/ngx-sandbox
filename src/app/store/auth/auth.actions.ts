@@ -37,6 +37,23 @@ export class LoginFailAction implements Action {
   constructor(public error: Error) {}
 }
 
+// login
+export const REFRESH_TOKEN = '[Auth] Refresh Token';
+export const REFRESH_TOKEN_SUCCESS = '[Auth] Refresh Token Success';
+export const REFRESH_TOKEN_FAIL = '[Auth] Refresh Token Fail';
+export class RefreshTokenAction implements Action {
+  readonly type = REFRESH_TOKEN;
+  constructor(public payload: string) {}
+}
+export class RefreshTokenSuccessAction implements Action {
+  readonly type = REFRESH_TOKEN_SUCCESS;
+  constructor(public payload: string) {}
+}
+export class RefreshTokenFailAction implements Action {
+  readonly type = REFRESH_TOKEN_FAIL;
+  constructor(public error: Error) {}
+}
+
 // user
 export const GET_CURRENT_USER = '[Auth] Get Current User';
 export const GET_CURRENT_USER_SUCCESS = '[Auth] Get Current User Success';
@@ -61,6 +78,9 @@ export type Actions =
   | LoginAction
   | LoginSuccessAction
   | LoginFailAction
+  | RefreshTokenAction
+  | RefreshTokenSuccessAction
+  | RefreshTokenFailAction
   | GetCurrentUserAction
   | GetCurrentUserSuccessAction
   | GetCurrentUserFailAction;

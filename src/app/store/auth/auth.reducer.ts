@@ -26,7 +26,8 @@ export function reducer(
   switch (action.type) {
     case auth.LOGIN:
     case auth.REGISTER:
-    case auth.GET_CURRENT_USER: {
+    case auth.GET_CURRENT_USER:
+    case auth.REFRESH_TOKEN: {
       return {
         ...state,
         loading: true,
@@ -35,7 +36,8 @@ export function reducer(
       };
     }
     case auth.LOGIN_SUCCESS:
-    case auth.REGISTER_SUCCESS: {
+    case auth.REGISTER_SUCCESS:
+    case auth.REFRESH_TOKEN_SUCCESS: {
       window.localStorage.setItem('token', action.payload);
       return {
         ...state,
@@ -56,7 +58,8 @@ export function reducer(
     }
     case auth.LOGIN_FAIL:
     case auth.REGISTER_FAIL:
-    case auth.GET_CURRENT_USER_FAIL: {
+    case auth.GET_CURRENT_USER_FAIL:
+    case auth.REFRESH_TOKEN_FAIL: {
       window.localStorage.removeItem('token');
       console.log('error', action);
       return {
